@@ -16,15 +16,15 @@ MonoBehaviour:
   - <ID>k__BackingField: 0
     <Name>k__BackingField: Capsule
     <Size>k__BackingField: {x: 2, y: 2}
-    <Prefab>k__BackingField: {fileID: 1393906263235984631, guid: e6262c8006cf8e34faf8103e4e420475,
+    <Prefab>k__BackingField: {fileID: 5620567208598194342, guid: e89245e85ff2ae9409e397165b0b68fd,
       type: 3}
   - <ID>k__BackingField: 1
     <Name>k__BackingField: Cube
     <Size>k__BackingField: {x: 2, y: 2}
-    <Prefab>k__BackingField: {fileID: 8879373480915412908, guid: 9381c292f1967554a95039fa28209618,
+    <Prefab>k__BackingField: {fileID: 3285735212303632951, guid: 601eeea9ff6ac9443b9ba36dde73c7a0,
       type: 3}
   - <ID>k__BackingField: 2
     <Name>k__BackingField: Silindir
-    <Size>k__BackingField: {x: 2, y: 1}
-    <Prefab>k__BackingField: {fileID: 1875202714455667029, guid: 235b85c335af33b4da0afc5e5e846969,
+    <Size>k__BackingField: {x: 2, y: 2}
+    <Prefab>k__BackingField: {fileID: 2272549257249388440, guid: 66a87a756b98d98408a84f0a8ed9f308,
       type: 3}
