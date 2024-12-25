@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlacementSystem : MonoBehaviour
@@ -20,6 +21,11 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField]
     GameObject gridVisualization;
 
+    GridData florData, furnitureData;
+
+    Renderer previewRenderer;
+
+    List<GameObject> placedGameObject = new();
 
     private void Start()
     {
@@ -28,6 +34,11 @@ public class PlacementSystem : MonoBehaviour
 
         inputManager.OnClicked += PlaceStructure;
         inputManager.OnExit += StopPlacement;
+
+
+        florData = new();
+        furnitureData = new();
+        previewRenderer = cellIndicator.GetComponent<Renderer>();
     }
 
 
@@ -39,6 +50,9 @@ public class PlacementSystem : MonoBehaviour
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
         
+        bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
+        previewRenderer.material.color = placementValidity ? Color.white : Color.red;
+
         mouseIndicator.transform.position = mousePosition;
         cellIndicator.transform.position = grid.GetCellCenterWorld(gridPosition); // Hücrenin tam ortasýndan baþlar
         //cellIndicator.transform.position = grid.CellToWorld(gridPosition); // // Hücrenin Sol alt köþesinden baþlar
@@ -79,11 +93,30 @@ public class PlacementSystem : MonoBehaviour
         
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+
+        bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
+        if (placementValidity == false)
+            return;
+
         GameObject newObject = Instantiate(dataBase.objects[selectedObjectIndex].Prefab);
         Debug.Log("Obje oluþturuldu");
-        newObject.transform.position = grid.GetCellCenterWorld(gridPosition); // Hücrenin tam ortasýndan baþlar
-        //newObject.transform.position = grid.CellToWorld(gridPosition); // Hücrenin Sol alt köþesinden baþlar
+        //newObject.transform.position = grid.GetCellCenterWorld(gridPosition); // Hücrenin tam ortasýndan baþlar
+        newObject.transform.position = grid.CellToWorld(gridPosition); // Hücrenin Sol alt köþesinden baþlar
+
+        placedGameObject.Add(newObject);
+        GridData selectedData = dataBase.objects[selectedObjectIndex].ID == 0 ? florData: furnitureData;
+
+        selectedData.AddObjectAt(gridPosition, 
+        dataBase.objects[selectedObjectIndex].Size,
+        dataBase.objects[selectedObjectIndex].ID,
+        placedGameObject.Count - 1);
+        
     }
 
+    private bool CheckPlacementValidity(Vector3Int gridPosition, int selectedObjectIndex)
+    {
+        GridData selectedData = dataBase.objects[selectedObjectIndex].ID == 0 ? florData: furnitureData;
 
+        return selectedData.CanPlaceObjectAt(gridPosition, dataBase.objects[selectedObjectIndex].Size);
+    }
 }
